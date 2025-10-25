@@ -14,14 +14,17 @@ const slideImages = [img1, img2, img3, img4, img5];
 
 const Layout = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
-  const location = useLocation(); // 👈 Dùng để biết đang ở trang nào
+  const location = useLocation();
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % slideImages.length);
-    }, 3000);
+    const interval = setInterval(() => nextSlide(), 4000);
     return () => clearInterval(interval);
   }, []);
+
+  const nextSlide = () =>
+    setCurrentSlide((prev) => (prev + 1) % slideImages.length);
+  const prevSlide = () =>
+    setCurrentSlide((prev) => (prev === 0 ? slideImages.length - 1 : prev - 1));
 
   return (
     <div
@@ -125,7 +128,7 @@ const Layout = () => {
               justifyContent: "center",
             }}
           >
-            <li style={{ margin: "0 20px", position: "relative" }}>
+            <li style={{ margin: "0 20px" }}>
               <Link
                 to="/"
                 style={{
@@ -140,7 +143,7 @@ const Layout = () => {
               </Link>
             </li>
 
-            <li style={{ margin: "0 20px", position: "relative" }}>
+            <li style={{ margin: "0 20px" }}>
               <Link
                 to="/page1"
                 style={{
@@ -155,7 +158,7 @@ const Layout = () => {
               </Link>
             </li>
 
-            <li style={{ margin: "0 20px", position: "relative" }}>
+            <li style={{ margin: "0 20px" }}>
               <a
                 href="#"
                 style={{
@@ -169,7 +172,7 @@ const Layout = () => {
                 Giới Thiệu
               </a>
             </li>
-            <li style={{ margin: "0 20px", position: "relative" }}>
+            <li style={{ margin: "0 20px" }}>
               <a
                 href="#"
                 style={{
@@ -183,7 +186,7 @@ const Layout = () => {
                 Tuyển Sinh
               </a>
             </li>
-            <li style={{ margin: "0 20px", position: "relative" }}>
+            <li style={{ margin: "0 20px" }}>
               <a
                 href="#"
                 style={{
@@ -201,15 +204,16 @@ const Layout = () => {
         </div>
       </div>
 
-      {/* 🟢 Chỉ hiển thị slide khi ở trang Home */}
+      {/* 🟢 Slide chỉ hiển thị ở trang Home */}
       {location.pathname === "/" && (
         <div
           id="slide"
           style={{
             width: "100%",
-            height: "400px",
+            height: "500px",
             overflow: "hidden",
             position: "relative",
+            backgroundColor: "black",
           }}
         >
           {slideImages.map((src, index) => (
@@ -217,18 +221,79 @@ const Layout = () => {
               key={index}
               src={src}
               alt={`Slide ${index + 1}`}
+              className={`slide-image ${
+                currentSlide === index ? "active" : ""
+              }`}
               style={{
                 width: "100%",
                 height: "100%",
                 objectFit: "cover",
+                objectPosition: "center",
                 position: "absolute",
                 top: 0,
                 left: 0,
                 opacity: currentSlide === index ? 1 : 0,
-                transition: "opacity 1s ease-in-out",
+                transition: "opacity 1s ease-in-out, transform 6s ease-in-out",
+                transform:
+                  currentSlide === index ? "scale(1.05)" : "scale(1.0)",
+                filter: "brightness(1.1) contrast(1.05)",
+                imageRendering: "auto" as any,
               }}
             />
           ))}
+
+          {/* ✅ Bỏ overlay đen hoặc để nhẹ hơn */}
+          <div
+            style={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              width: "100%",
+              height: "100%",
+              background:
+                "linear-gradient(to bottom, rgba(0,0,0,0.05), rgba(0,0,0,0.15))",
+              pointerEvents: "none",
+            }}
+          ></div>
+
+          {/* ⬅️➡️ Nút điều hướng */}
+          <button
+            onClick={prevSlide}
+            style={{
+              position: "absolute",
+              top: "50%",
+              left: "20px",
+              transform: "translateY(-50%)",
+              background: "rgba(0,0,0,0.4)",
+              color: "white",
+              border: "none",
+              padding: "10px 15px",
+              cursor: "pointer",
+              fontSize: "22px",
+              borderRadius: "5px",
+            }}
+          >
+            &#10094;
+          </button>
+
+          <button
+            onClick={nextSlide}
+            style={{
+              position: "absolute",
+              top: "50%",
+              right: "20px",
+              transform: "translateY(-50%)",
+              background: "rgba(0,0,0,0.4)",
+              color: "white",
+              border: "none",
+              padding: "10px 15px",
+              cursor: "pointer",
+              fontSize: "22px",
+              borderRadius: "5px",
+            }}
+          >
+            &#10095;
+          </button>
         </div>
       )}
 

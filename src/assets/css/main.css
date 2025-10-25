@@ -15,7 +15,7 @@ body {
 #topleft ul li a {
   text-decoration: none;
   font-family: "Times New Roman", Times, serif;
-  color: blueviolet;
+  color: rgb(0, 0, 0);
 }
 
 .header1 {
@@ -43,7 +43,7 @@ body {
 }
 .menu {
   height: 56px;
-  background-color: #b22d30;
+  background-color: #000;
 }
 .logo1 {
   width: 560px;

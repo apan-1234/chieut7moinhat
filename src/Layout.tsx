@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Outlet, Link } from "react-router-dom";
-import anhlogo from "./assets/images/Ten-truong-do-1000x159.png";
+import anhlogo from "./assets/images/logo.jpg";
 
 import img1 from "./assets/images/1.jpg";
 import img2 from "./assets/images/2.jpg";
@@ -26,11 +26,11 @@ const Layout = () => {
   return (
     <div style={{ margin: 0, fontFamily: "Arial, sans-serif" }}>
       {/* Header */}
-      <div id="head" style={{ height: "150px" }}>
+      <div id="head" style={{ height: "200px" }}>
         <div
           id="banner"
           style={{
-            height: "70px",
+            height: "115px",
             display: "flex",
             alignItems: "center",
             padding: "0 20px",

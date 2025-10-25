@@ -1,20 +1,18 @@
-// data/product.ts
-
 export interface Product {
   id: number;
   name: string;
   price: number;
   description: string;
-  image: string; // đường dẫn ảnh
+  image: string;
 }
 
 const products: Product[] = [
   {
     id: 1,
-    name: "Sản phẩm A",
+    name: "ÁO THE UNDERDOG",
     price: 100000,
-    description: "Mô tả sản phẩm A",
-    image: "/images/sp1.jpg",
+    description: "ÁO THUN T-SHIRT",
+    image: "/images/sp1.jpg", // Đảm bảo là đường dẫn từ thư mục public
   },
   {
     id: 2,

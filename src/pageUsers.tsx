@@ -4,7 +4,7 @@ import users from "./data/users";
 const PageUsers = () => {
   return (
     <div style={{ padding: "20px" }}>
-      <h1>Danh sách người dùng</h1>
+      <h1>The UnderDog</h1>
       <div
         style={{
           display: "flex",

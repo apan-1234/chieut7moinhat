@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/static/css/main.741b2779.css",
+    "main.js": "/static/js/main.6bc40141.js",
+    "static/media/Ten-truong-do-1000x159.png": "/static/media/Ten-truong-do-1000x159.a75cad13382e72bcc4ff.png",
+    "static/media/1.jpg": "/static/media/1.2bae08414d64960bbbab.jpg",
+    "index.html": "/index.html",
+    "main.741b2779.css.map": "/static/css/main.741b2779.css.map",
+    "main.6bc40141.js.map": "/static/js/main.6bc40141.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.741b2779.css",
+    "static/js/main.6bc40141.js"
+  ]
+}

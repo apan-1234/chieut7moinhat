@@ -1,0 +1,50 @@
+body {
+  margin: 0;
+}
+#topleft ul {
+  text-decoration: none;
+  list-style: none;
+  width: 350px;
+  padding-top: 20px;
+}
+#topleft ul li {
+  text-decoration: none;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+#topleft ul li a {
+  text-decoration: none;
+  font-family: "Times New Roman", Times, serif;
+  color: blueviolet;
+}
+
+.header1 {
+  height: 160px;
+  display: flex;
+  flex-direction: column;
+}
+
+.banner1 {
+  height: 104px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.ul1 {
+  display: flex;
+  flex-direction: row;
+}
+
+.container {
+  min-height: 500px;
+  justify-content: center;
+  display: flex;
+}
+.menu {
+  height: 56px;
+  background-color: #b22d30;
+}
+.logo1 {
+  width: 560px;
+}

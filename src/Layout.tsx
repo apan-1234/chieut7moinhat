@@ -60,6 +60,7 @@ const Layout = () => {
                   Trang Chủ
                 </Link>
               </li>
+
               <li style={{ listStyle: "none", padding: "10px" }}>
                 <Link
                   to="/page1"
@@ -69,20 +70,21 @@ const Layout = () => {
                     fontWeight: "bold",
                   }}
                 >
-                  EGOV
+                  Shop
                 </Link>
               </li>
+
               <li style={{ listStyle: "none", padding: "10px" }}>
-                <a
-                  href="#"
+                <Link
+                  to="/users"
                   style={{
                     textDecoration: "none",
                     color: "white",
                     fontWeight: "bold",
                   }}
                 >
-                  Sinh Viên
-                </a>
+                  Thành Viên
+                </Link>
               </li>
             </ul>
           </div>
@@ -154,7 +156,22 @@ const Layout = () => {
                   fontWeight: "bold",
                 }}
               >
-                EGOV
+                Shop
+              </Link>
+            </li>
+
+            <li style={{ margin: "0 20px" }}>
+              <Link
+                to="/users"
+                style={{
+                  display: "block",
+                  color: "white",
+                  padding: "20px 10px",
+                  textDecoration: "none",
+                  fontWeight: "bold",
+                }}
+              >
+                Thành Viên
               </Link>
             </li>
 
@@ -172,6 +189,7 @@ const Layout = () => {
                 Giới Thiệu
               </a>
             </li>
+
             <li style={{ margin: "0 20px" }}>
               <a
                 href="#"
@@ -186,6 +204,7 @@ const Layout = () => {
                 Tuyển Sinh
               </a>
             </li>
+
             <li style={{ margin: "0 20px" }}>
               <a
                 href="#"
@@ -221,9 +240,6 @@ const Layout = () => {
               key={index}
               src={src}
               alt={`Slide ${index + 1}`}
-              className={`slide-image ${
-                currentSlide === index ? "active" : ""
-              }`}
               style={{
                 width: "100%",
                 height: "100%",
@@ -237,12 +253,11 @@ const Layout = () => {
                 transform:
                   currentSlide === index ? "scale(1.05)" : "scale(1.0)",
                 filter: "brightness(1.1) contrast(1.05)",
-                imageRendering: "auto" as any,
               }}
             />
           ))}
 
-          {/* ✅ Bỏ overlay đen hoặc để nhẹ hơn */}
+          {/* Overlay nhẹ */}
           <div
             style={{
               position: "absolute",
@@ -256,7 +271,7 @@ const Layout = () => {
             }}
           ></div>
 
-          {/* ⬅️➡️ Nút điều hướng */}
+          {/* Nút điều hướng */}
           <button
             onClick={prevSlide}
             style={{

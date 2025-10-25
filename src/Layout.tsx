@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Outlet, Link } from "react-router-dom";
+import { Outlet, Link, useLocation } from "react-router-dom";
 import anhlogo from "./assets/images/logo.jpg";
 
 import img1 from "./assets/images/1.jpg";
@@ -14,7 +14,7 @@ const slideImages = [img1, img2, img3, img4, img5];
 
 const Layout = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
-  const [hoveredMenu, setHoveredMenu] = useState(null);
+  const location = useLocation(); // 👈 Dùng để biết đang ở trang nào
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -24,7 +24,13 @@ const Layout = () => {
   }, []);
 
   return (
-    <div style={{ margin: 0, fontFamily: "Arial, sans-serif" }}>
+    <div
+      style={{
+        margin: 0,
+        fontFamily: "Arial, sans-serif",
+        background: "black",
+      }}
+    >
       {/* Header */}
       <div id="head" style={{ height: "200px" }}>
         <div
@@ -44,7 +50,7 @@ const Layout = () => {
                   to="/"
                   style={{
                     textDecoration: "none",
-                    color: "black",
+                    color: "white",
                     fontWeight: "bold",
                   }}
                 >
@@ -56,7 +62,7 @@ const Layout = () => {
                   to="/page1"
                   style={{
                     textDecoration: "none",
-                    color: "black",
+                    color: "white",
                     fontWeight: "bold",
                   }}
                 >
@@ -68,7 +74,7 @@ const Layout = () => {
                   href="#"
                   style={{
                     textDecoration: "none",
-                    color: "black",
+                    color: "white",
                     fontWeight: "bold",
                   }}
                 >
@@ -107,7 +113,7 @@ const Layout = () => {
         </div>
 
         {/* Navigation */}
-        <div id="nav" style={{ height: "80px", backgroundColor: "brown" }}>
+        <div id="nav" style={{ height: "80px", backgroundColor: "black" }}>
           <ul
             style={{
               listStyle: "none",
@@ -119,7 +125,6 @@ const Layout = () => {
               justifyContent: "center",
             }}
           >
-            {/* Trang Chủ */}
             <li style={{ margin: "0 20px", position: "relative" }}>
               <Link
                 to="/"
@@ -135,7 +140,6 @@ const Layout = () => {
               </Link>
             </li>
 
-            {/* EGOV */}
             <li style={{ margin: "0 20px", position: "relative" }}>
               <Link
                 to="/page1"
@@ -151,7 +155,6 @@ const Layout = () => {
               </Link>
             </li>
 
-            {/* Các mục khác giữ nguyên */}
             <li style={{ margin: "0 20px", position: "relative" }}>
               <a
                 href="#"
@@ -198,36 +201,38 @@ const Layout = () => {
         </div>
       </div>
 
-      {/* Slide Show */}
-      <div
-        id="slide"
-        style={{
-          width: "100%",
-          height: "400px",
-          overflow: "hidden",
-          position: "relative",
-        }}
-      >
-        {slideImages.map((src, index) => (
-          <img
-            key={index}
-            src={src}
-            alt={`Slide ${index + 1}`}
-            style={{
-              width: "100%",
-              height: "100%",
-              objectFit: "cover",
-              position: "absolute",
-              top: 0,
-              left: 0,
-              opacity: currentSlide === index ? 1 : 0,
-              transition: "opacity 1s ease-in-out",
-            }}
-          />
-        ))}
-      </div>
+      {/* 🟢 Chỉ hiển thị slide khi ở trang Home */}
+      {location.pathname === "/" && (
+        <div
+          id="slide"
+          style={{
+            width: "100%",
+            height: "400px",
+            overflow: "hidden",
+            position: "relative",
+          }}
+        >
+          {slideImages.map((src, index) => (
+            <img
+              key={index}
+              src={src}
+              alt={`Slide ${index + 1}`}
+              style={{
+                width: "100%",
+                height: "100%",
+                objectFit: "cover",
+                position: "absolute",
+                top: 0,
+                left: 0,
+                opacity: currentSlide === index ? 1 : 0,
+                transition: "opacity 1s ease-in-out",
+              }}
+            />
+          ))}
+        </div>
+      )}
 
-      {/* Main content */}
+      {/* Nội dung chính */}
       <div id="container" className="container">
         <Outlet />
       </div>

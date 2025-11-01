@@ -1,12 +1,14 @@
+// src/App.tsx
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 import Layout from "./Layout";
-import Home from "./Home"; // Trang chủ mặc định
-import Page1 from "./page1"; // Trang sản phẩm (EGOV)
+import Home from "./Home";
+import Page1 from "./page1";
+import Add from "./add";
+import Edit from "./edit";
 import PageUsers from "./pageUsers"; // Trang người dùng mới
-
-const App = () => {
+const App: React.FC = () => {
   return (
     <Router>
       <Routes>
@@ -14,11 +16,14 @@ const App = () => {
           {/* Trang mặc định */}
           <Route index element={<Home />} />
 
-          {/* Trang sản phẩm */}
+          {/* Danh sách sản phẩm */}
           <Route path="page1" element={<Page1 />} />
 
-          {/* Trang người dùng */}
-          <Route path="users" element={<PageUsers />} />
+          {/* Thêm sản phẩm */}
+          <Route path="add" element={<Add />} />
+
+          {/* Chỉnh sửa sản phẩm */}
+          <Route path="edit/:id" element={<Edit />} />
         </Route>
       </Routes>
     </Router>

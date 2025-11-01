@@ -1,8 +1,37 @@
-// src/page1.js
-import React from "react";
-import products from "./data/product";
+// src/page1.tsx
+import React, { useEffect, useState } from "react";
+import { supabase } from "./supabaseClient";
 
-const Page1 = () => {
+interface Product {
+  id: number;
+  name: string;
+  description: string;
+  price: number;
+  image: string;
+}
+
+const Page1: React.FC = () => {
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchProducts();
+  }, []);
+
+  const fetchProducts = async () => {
+    const { data, error } = await supabase
+      .from("products")
+      .select("*")
+      .order("id", { ascending: false });
+
+    if (error) console.error("Lỗi tải sản phẩm:", error.message);
+    else setProducts(data || []);
+
+    setLoading(false);
+  };
+
+  if (loading) return <p>Đang tải dữ liệu...</p>;
+
   return (
     <div style={{ padding: "20px" }}>
       <h1>Danh sách sản phẩm</h1>
@@ -32,12 +61,7 @@ const Page1 = () => {
             />
             <h3>{product.name}</h3>
             <p>{product.description}</p>
-            <p
-              style={{
-                fontWeight: "bold",
-                color: "brown",
-              }}
-            >
+            <p style={{ fontWeight: "bold", color: "brown" }}>
               Giá:{" "}
               {product.price.toLocaleString("vi-VN", {
                 style: "currency",

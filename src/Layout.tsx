@@ -34,7 +34,7 @@ const Layout = () => {
         background: "black",
       }}
     >
-      {/* Header */}
+      {/* ================= HEADER ================= */}
       <div id="head" style={{ height: "200px" }}>
         <div
           id="banner"
@@ -43,65 +43,27 @@ const Layout = () => {
             display: "flex",
             alignItems: "center",
             padding: "0 20px",
+            justifyContent: "space-between",
           }}
         >
-          {/* Left Nav */}
-          <div id="site" style={{ width: "400px" }}>
-            <ul style={{ display: "flex", padding: 0, margin: 0 }}>
-              <li style={{ listStyle: "none", padding: "10px" }}>
-                <Link
-                  to="/"
-                  style={{
-                    textDecoration: "none",
-                    color: "white",
-                    fontWeight: "bold",
-                  }}
-                >
-                  Trang Chủ
-                </Link>
-              </li>
-
-              <li style={{ listStyle: "none", padding: "10px" }}>
-                <Link
-                  to="/page1"
-                  style={{
-                    textDecoration: "none",
-                    color: "white",
-                    fontWeight: "bold",
-                  }}
-                >
-                  Shop
-                </Link>
-              </li>
-
-              <li style={{ listStyle: "none", padding: "10px" }}>
-                <Link
-                  to="/users"
-                  style={{
-                    textDecoration: "none",
-                    color: "white",
-                    fontWeight: "bold",
-                  }}
-                >
-                  Thành Viên
-                </Link>
-              </li>
-            </ul>
-          </div>
-
-          {/* Logo */}
-          <div id="logo" style={{ width: "560px", textAlign: "center" }}>
+          {/* 🟢 Logo giữa */}
+          <div id="logo" style={{ flex: 1, textAlign: "center" }}>
             <img src={anhlogo} alt="Logo" style={{ width: "400px" }} />
           </div>
 
-          {/* Search */}
+          {/* 🔍 Search bên phải */}
           <div id="search" style={{ marginLeft: "auto", marginTop: "10px" }}>
             <form style={{ display: "flex" }}>
               <input
                 type="text"
                 name="q"
                 placeholder="Tìm kiếm..."
-                style={{ padding: "5px", fontSize: "14px" }}
+                style={{
+                  padding: "5px",
+                  fontSize: "14px",
+                  borderRadius: "4px",
+                  border: "1px solid #ccc",
+                }}
               />
               <button
                 type="submit"
@@ -109,6 +71,11 @@ const Layout = () => {
                   padding: "5px 10px",
                   marginLeft: "5px",
                   fontSize: "14px",
+                  borderRadius: "4px",
+                  border: "none",
+                  backgroundColor: "#444",
+                  color: "white",
+                  cursor: "pointer",
                 }}
               >
                 Tìm
@@ -117,7 +84,7 @@ const Layout = () => {
           </div>
         </div>
 
-        {/* Navigation */}
+        {/* ================== NAVIGATION MENU ================== */}
         <div id="nav" style={{ height: "80px", backgroundColor: "black" }}>
           <ul
             style={{
@@ -223,7 +190,7 @@ const Layout = () => {
         </div>
       </div>
 
-      {/* 🟢 Slide chỉ hiển thị ở trang Home */}
+      {/* ================= SLIDE SHOW ================= */}
       {location.pathname === "/" && (
         <div
           id="slide"
@@ -312,7 +279,7 @@ const Layout = () => {
         </div>
       )}
 
-      {/* Nội dung chính */}
+      {/* ================= MAIN CONTENT ================= */}
       <div id="container" className="container">
         <Outlet />
       </div>

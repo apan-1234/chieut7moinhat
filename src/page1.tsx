@@ -1,6 +1,6 @@
-// src/page1.tsx
 import React, { useEffect, useState } from "react";
 import { supabase } from "./supabaseClient";
+import { useNavigate } from "react-router-dom";
 
 interface Product {
   id: number;
@@ -13,6 +13,7 @@ interface Product {
 const Page1: React.FC = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchProducts();
@@ -33,8 +34,9 @@ const Page1: React.FC = () => {
   if (loading) return <p>Đang tải dữ liệu...</p>;
 
   return (
-    <div style={{ padding: "20px" }}>
+    <div style={{ padding: "20px", position: "relative" }}>
       <h1>Danh sách sản phẩm</h1>
+
       <div
         style={{
           display: "flex",
@@ -52,15 +54,33 @@ const Page1: React.FC = () => {
               padding: "10px",
               width: "200px",
               boxShadow: "2px 2px 6px rgba(0,0,0,0.1)",
+              backgroundColor: "#fff",
+              transition: "transform 0.2s ease",
             }}
+            onMouseEnter={(e) =>
+              (e.currentTarget.style.transform = "translateY(-4px)")
+            }
+            onMouseLeave={(e) =>
+              (e.currentTarget.style.transform = "translateY(0)")
+            }
           >
             <img
               src={product.image}
               alt={product.name}
-              style={{ width: "100%", borderRadius: "8px" }}
+              style={{
+                width: "100%",
+                borderRadius: "8px",
+                marginBottom: "10px",
+                objectFit: "cover",
+                height: "150px",
+              }}
             />
-            <h3>{product.name}</h3>
-            <p>{product.description}</p>
+            <h3 style={{ fontSize: "16px", marginBottom: "5px" }}>
+              {product.name}
+            </h3>
+            <p style={{ fontSize: "13px", color: "#555" }}>
+              {product.description}
+            </p>
             <p style={{ fontWeight: "bold", color: "brown" }}>
               Giá:{" "}
               {product.price.toLocaleString("vi-VN", {
@@ -71,6 +91,37 @@ const Page1: React.FC = () => {
           </div>
         ))}
       </div>
+
+      {/* Nút dấu cộng nổi góc phải */}
+      <button
+        onClick={() => navigate("/add")}
+        style={{
+          position: "fixed",
+          bottom: "30px",
+          right: "30px",
+          backgroundColor: "#007bff",
+          color: "#fff",
+          border: "none",
+          borderRadius: "50%",
+          width: "55px",
+          height: "55px",
+          fontSize: "28px",
+          fontWeight: "bold",
+          boxShadow: "0 4px 10px rgba(0,0,0,0.2)",
+          cursor: "pointer",
+          transition: "transform 0.2s ease, background-color 0.2s ease",
+        }}
+        onMouseEnter={(e) => {
+          e.currentTarget.style.transform = "scale(1.1)";
+          e.currentTarget.style.backgroundColor = "#0056b3";
+        }}
+        onMouseLeave={(e) => {
+          e.currentTarget.style.transform = "scale(1)";
+          e.currentTarget.style.backgroundColor = "#007bff";
+        }}
+      >
+        +
+      </button>
     </div>
   );
 };

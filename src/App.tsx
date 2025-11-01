@@ -24,6 +24,8 @@ const App: React.FC = () => {
 
           {/* Chỉnh sửa sản phẩm */}
           <Route path="edit/:id" element={<Edit />} />
+          {/* Thêm sản phẩm */}
+          <Route path="users" element={<PageUsers />} />
         </Route>
       </Routes>
     </Router>

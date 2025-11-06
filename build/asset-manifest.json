@@ -1,15 +1,17 @@
 {
   "files": {
-    "main.css": "/static/css/main.741b2779.css",
-    "main.js": "/static/js/main.6bc40141.js",
-    "static/media/Ten-truong-do-1000x159.png": "/static/media/Ten-truong-do-1000x159.a75cad13382e72bcc4ff.png",
-    "static/media/1.jpg": "/static/media/1.2bae08414d64960bbbab.jpg",
+    "main.css": "/static/css/main.b96fe703.css",
+    "main.js": "/static/js/main.207ef314.js",
+    "static/media/5.jpg": "/static/media/5.1af9a0b3fd51c5383b74.jpg",
+    "static/media/4.jpg": "/static/media/4.0ad111c9488646264c64.jpg",
+    "static/media/3.jpg": "/static/media/3.354e7c657f3a039ffc94.jpg",
+    "static/media/1.jpg": "/static/media/1.ec164c88f656523165dd.jpg",
     "index.html": "/index.html",
-    "main.741b2779.css.map": "/static/css/main.741b2779.css.map",
-    "main.6bc40141.js.map": "/static/js/main.6bc40141.js.map"
+    "main.b96fe703.css.map": "/static/css/main.b96fe703.css.map",
+    "main.207ef314.js.map": "/static/js/main.207ef314.js.map"
   },
   "entrypoints": [
-    "static/css/main.741b2779.css",
-    "static/js/main.6bc40141.js"
+    "static/css/main.b96fe703.css",
+    "static/js/main.207ef314.js"
   ]
 }

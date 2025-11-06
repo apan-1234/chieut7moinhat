@@ -156,36 +156,6 @@ const Layout = () => {
                 Giới Thiệu
               </a>
             </li>
-
-            <li style={{ margin: "0 20px" }}>
-              <a
-                href="#"
-                style={{
-                  display: "block",
-                  color: "white",
-                  padding: "20px 10px",
-                  textDecoration: "none",
-                  fontWeight: "bold",
-                }}
-              >
-                Tuyển Sinh
-              </a>
-            </li>
-
-            <li style={{ margin: "0 20px" }}>
-              <a
-                href="#"
-                style={{
-                  display: "block",
-                  color: "white",
-                  padding: "20px 10px",
-                  textDecoration: "none",
-                  fontWeight: "bold",
-                }}
-              >
-                Liên Hệ
-              </a>
-            </li>
           </ul>
         </div>
       </div>

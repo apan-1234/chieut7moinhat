@@ -13,7 +13,7 @@ const Register: React.FC = () => {
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const { error } = await supabaseAdmin.from("ACCOUNT").insert([
+    const { error } = await supabaseAdmin.from("account").insert([
       {
         username,
         email,

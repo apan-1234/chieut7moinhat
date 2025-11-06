@@ -54,7 +54,7 @@ const Page1: React.FC = () => {
               padding: "10px",
               width: "200px",
               boxShadow: "2px 2px 6px rgba(0,0,0,0.1)",
-              backgroundColor: "#fff",
+              backgroundColor: "#000",
               transition: "transform 0.2s ease",
             }}
             onMouseEnter={(e) =>
@@ -72,7 +72,7 @@ const Page1: React.FC = () => {
                 borderRadius: "8px",
                 marginBottom: "10px",
                 objectFit: "cover",
-                height: "150px",
+                height: "200px",
               }}
             />
             <h3 style={{ fontSize: "16px", marginBottom: "5px" }}>

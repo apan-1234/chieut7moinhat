@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Outlet, Link, useLocation } from "react-router-dom";
 import anhlogo from "./assets/images/logo.jpg";
+import banner from "./assets/images/banner.jpg"; // 👉 Thêm hình banner ở đây
 
 import img1 from "./assets/images/1.jpg";
 import img2 from "./assets/images/2.jpg";
@@ -42,41 +43,62 @@ const Layout = () => {
             height: "115px",
             display: "flex",
             alignItems: "center",
-            padding: "0 20px",
             justifyContent: "space-between",
+            padding: "0 30px",
+            backgroundImage: `url(${banner})`,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            backgroundRepeat: "no-repeat",
           }}
         >
-          {/* 🟢 Logo giữa */}
-          <div id="logo" style={{ flex: 1, textAlign: "center" }}>
-            <img src={anhlogo} alt="Logo" style={{ width: "400px" }} />
+          {/* 🟢 Logo bên trái */}
+          <div id="logo" style={{ flex: "0 0 auto" }}>
+            <img
+              src={anhlogo}
+              alt="Logo"
+              style={{
+                width: "250px",
+                height: "auto",
+                borderRadius: "10px",
+                objectFit: "contain",
+              }}
+            />
           </div>
 
-          {/* 🔍 Search bên phải */}
-          <div id="search" style={{ marginLeft: "auto", marginTop: "10px" }}>
+          {/* 🔍 Tìm kiếm bên phải */}
+          <div id="search" style={{ flex: "0 0 auto" }}>
             <form style={{ display: "flex" }}>
               <input
                 type="text"
                 name="q"
                 placeholder="Tìm kiếm..."
                 style={{
-                  padding: "5px",
+                  padding: "6px 10px",
                   fontSize: "14px",
                   borderRadius: "4px",
-                  border: "1px solid #ccc",
+                  border: "1px solid #aaa",
+                  width: "200px",
                 }}
               />
               <button
                 type="submit"
                 style={{
-                  padding: "5px 10px",
-                  marginLeft: "5px",
+                  padding: "6px 12px",
+                  marginLeft: "6px",
                   fontSize: "14px",
                   borderRadius: "4px",
                   border: "none",
-                  backgroundColor: "#444",
+                  backgroundColor: "#222", // Màu đen/xám đậm
                   color: "white",
                   cursor: "pointer",
+                  transition: "background 0.3s",
                 }}
+                onMouseOver={(e) =>
+                  (e.currentTarget.style.backgroundColor = "#555")
+                }
+                onMouseOut={(e) =>
+                  (e.currentTarget.style.backgroundColor = "#222")
+                }
               >
                 Tìm
               </button>
@@ -181,7 +203,6 @@ const Layout = () => {
                 width: "100%",
                 height: "100%",
                 objectFit: "cover",
-                objectPosition: "center",
                 position: "absolute",
                 top: 0,
                 left: 0,
@@ -194,7 +215,7 @@ const Layout = () => {
             />
           ))}
 
-          {/* Overlay nhẹ */}
+          {/* Overlay */}
           <div
             style={{
               position: "absolute",
@@ -204,11 +225,10 @@ const Layout = () => {
               height: "100%",
               background:
                 "linear-gradient(to bottom, rgba(0,0,0,0.05), rgba(0,0,0,0.15))",
-              pointerEvents: "none",
             }}
           ></div>
 
-          {/* Nút điều hướng */}
+          {/* Buttons */}
           <button
             onClick={prevSlide}
             style={{

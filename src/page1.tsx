@@ -13,11 +13,10 @@ interface Product {
 const Page1: React.FC = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
-  const [role, setRole] = useState<string>("guest"); // thêm state role
+  const [role, setRole] = useState<string>("guest");
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Lấy user từ localStorage để biết role
     const user = localStorage.getItem("user");
     if (user) {
       const parsedUser = JSON.parse(user);
@@ -55,6 +54,7 @@ const Page1: React.FC = () => {
         {products.map((product) => (
           <div
             key={product.id}
+            onClick={() => navigate(`/product/${product.id}`)} // ⭐ CLICK → Product Detail
             style={{
               border: "1px solid #ccc",
               borderRadius: "8px",
@@ -64,6 +64,7 @@ const Page1: React.FC = () => {
               backgroundColor: "#000",
               transition: "transform 0.2s ease",
               color: "#fff",
+              cursor: "pointer", // ⭐ thêm để thấy có thể click
             }}
             onMouseEnter={(e) =>
               (e.currentTarget.style.transform = "translateY(-4px)")
@@ -83,12 +84,15 @@ const Page1: React.FC = () => {
                 height: "200px",
               }}
             />
+
             <h3 style={{ fontSize: "16px", marginBottom: "5px" }}>
               {product.name}
             </h3>
+
             <p style={{ fontSize: "13px", color: "#ccc" }}>
               {product.description}
             </p>
+
             <p style={{ fontWeight: "bold", color: "orange" }}>
               Giá:{" "}
               {product.price.toLocaleString("vi-VN", {
@@ -100,7 +104,6 @@ const Page1: React.FC = () => {
         ))}
       </div>
 
-      {/* ✅ Nút dấu cộng chỉ hiện nếu là admin */}
       {role === "admin" && (
         <button
           onClick={() => navigate("/add")}

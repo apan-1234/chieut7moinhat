@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Outlet, Link, useLocation } from "react-router-dom";
 import anhlogo from "./assets/images/logo.jpg";
+import bannerImg from "./assets/images/banner.jpg";
 
 import img1 from "./assets/images/1.jpg";
 import img2 from "./assets/images/2.jpg";
@@ -34,79 +35,115 @@ const Layout = () => {
         background: "black",
       }}
     >
-      {/* Header */}
-      <div id="head" style={{ height: "200px" }}>
+      {/* ================= HEADER ================= */}
+      <div id="head">
+        {/* ================== BANNER ================== */}
         <div
           id="banner"
           style={{
-            height: "115px",
             display: "flex",
             alignItems: "center",
-            padding: "0 20px",
+            justifyContent: "space-between",
+            padding: "10px 20px",
+            height: "140px",
+            backgroundColor: "#111",
+            overflow: "hidden",
           }}
         >
-          {/* Left Nav */}
-          <div id="site" style={{ width: "400px" }}>
-            <ul style={{ display: "flex", padding: 0, margin: 0 }}>
-              <li style={{ listStyle: "none", padding: "10px" }}>
-                <Link
-                  to="/"
-                  style={{
-                    textDecoration: "none",
-                    color: "white",
-                    fontWeight: "bold",
-                  }}
-                >
-                  Trang Chủ
-                </Link>
-              </li>
-              <li style={{ listStyle: "none", padding: "10px" }}>
-                <Link
-                  to="/page1"
-                  style={{
-                    textDecoration: "none",
-                    color: "white",
-                    fontWeight: "bold",
-                  }}
-                >
-                  EGOV
-                </Link>
-              </li>
-              <li style={{ listStyle: "none", padding: "10px" }}>
-                <a
-                  href="#"
-                  style={{
-                    textDecoration: "none",
-                    color: "white",
-                    fontWeight: "bold",
-                  }}
-                >
-                  Sinh Viên
-                </a>
-              </li>
-            </ul>
+          {/* 🟢 Logo bên trái */}
+          <div
+            id="logo"
+            style={{
+              flex: "0 0 auto",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              marginRight: "20px",
+            }}
+          >
+            <img
+              src={anhlogo}
+              alt="Logo"
+              style={{
+                width: "160px",
+                height: "auto",
+                objectFit: "contain",
+              }}
+            />
           </div>
 
-          {/* Logo */}
-          <div id="logo" style={{ width: "560px", textAlign: "center" }}>
-            <img src={anhlogo} alt="Logo" style={{ width: "400px" }} />
+          {/* 🟡 Banner giữa */}
+          <div
+            id="banner-center"
+            style={{
+              flex: "1 1 auto",
+              textAlign: "center",
+              height: "100%",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              overflow: "hidden",
+              borderRadius: "10px",
+            }}
+          >
+            <img
+              src={bannerImg}
+              alt="Banner"
+              style={{
+                width: "100%",
+                height: "100%",
+                objectFit: "cover",
+                objectPosition: "center",
+                transition: "transform 0.5s ease",
+              }}
+              onMouseOver={(e) =>
+                (e.currentTarget.style.transform = "scale(1.05)")
+              }
+              onMouseOut={(e) =>
+                (e.currentTarget.style.transform = "scale(1.0)")
+              }
+            />
           </div>
 
-          {/* Search */}
-          <div id="search" style={{ marginLeft: "auto", marginTop: "10px" }}>
-            <form style={{ display: "flex" }}>
+          {/* 🔍 Search bên phải */}
+          <div
+            id="search"
+            style={{
+              flex: "0 0 250px",
+              marginLeft: "20px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <form
+              style={{
+                display: "flex",
+                width: "100%",
+              }}
+            >
               <input
                 type="text"
-                name="q"
                 placeholder="Tìm kiếm..."
-                style={{ padding: "5px", fontSize: "14px" }}
+                style={{
+                  flex: 1,
+                  padding: "8px 10px",
+                  fontSize: "14px",
+                  borderRadius: "4px 0 0 4px",
+                  border: "1px solid #ccc",
+                  outline: "none",
+                }}
               />
               <button
                 type="submit"
                 style={{
-                  padding: "5px 10px",
-                  marginLeft: "5px",
-                  fontSize: "14px",
+                  padding: "8px 15px",
+                  backgroundColor: "#ff6600",
+                  color: "white",
+                  border: "none",
+                  borderRadius: "0 4px 4px 0",
+                  cursor: "pointer",
+                  fontWeight: "bold",
                 }}
               >
                 Tìm
@@ -115,8 +152,8 @@ const Layout = () => {
           </div>
         </div>
 
-        {/* Navigation */}
-        <div id="nav" style={{ height: "80px", backgroundColor: "black" }}>
+        {/* ================== NAVIGATION MENU ================== */}
+        <div id="nav" style={{ height: "70px", backgroundColor: "black" }}>
           <ul
             style={{
               listStyle: "none",
@@ -128,83 +165,31 @@ const Layout = () => {
               justifyContent: "center",
             }}
           >
-            <li style={{ margin: "0 20px" }}>
-              <Link
-                to="/"
-                style={{
-                  display: "block",
-                  color: "white",
-                  padding: "20px 10px",
-                  textDecoration: "none",
-                  fontWeight: "bold",
-                }}
-              >
-                Trang Chủ
-              </Link>
-            </li>
-
-            <li style={{ margin: "0 20px" }}>
-              <Link
-                to="/page1"
-                style={{
-                  display: "block",
-                  color: "white",
-                  padding: "20px 10px",
-                  textDecoration: "none",
-                  fontWeight: "bold",
-                }}
-              >
-                EGOV
-              </Link>
-            </li>
-
-            <li style={{ margin: "0 20px" }}>
-              <a
-                href="#"
-                style={{
-                  display: "block",
-                  color: "white",
-                  padding: "20px 10px",
-                  textDecoration: "none",
-                  fontWeight: "bold",
-                }}
-              >
-                Giới Thiệu
-              </a>
-            </li>
-            <li style={{ margin: "0 20px" }}>
-              <a
-                href="#"
-                style={{
-                  display: "block",
-                  color: "white",
-                  padding: "20px 10px",
-                  textDecoration: "none",
-                  fontWeight: "bold",
-                }}
-              >
-                Tuyển Sinh
-              </a>
-            </li>
-            <li style={{ margin: "0 20px" }}>
-              <a
-                href="#"
-                style={{
-                  display: "block",
-                  color: "white",
-                  padding: "20px 10px",
-                  textDecoration: "none",
-                  fontWeight: "bold",
-                }}
-              >
-                Liên Hệ
-              </a>
-            </li>
+            {[
+              { to: "/", label: "Trang Chủ" },
+              { to: "/page1", label: "Shop" },
+              { to: "/users", label: "Thành Viên" },
+              { to: "#", label: "Giới Thiệu" },
+            ].map((item, i) => (
+              <li key={i} style={{ margin: "0 20px" }}>
+                <Link
+                  to={item.to}
+                  style={{
+                    color: "white",
+                    textDecoration: "none",
+                    fontWeight: "bold",
+                    fontSize: "16px",
+                  }}
+                >
+                  {item.label}
+                </Link>
+              </li>
+            ))}
           </ul>
         </div>
       </div>
 
-      {/* 🟢 Slide chỉ hiển thị ở trang Home */}
+      {/* ================= SLIDE SHOW ================= */}
       {location.pathname === "/" && (
         <div
           id="slide"
@@ -221,9 +206,6 @@ const Layout = () => {
               key={index}
               src={src}
               alt={`Slide ${index + 1}`}
-              className={`slide-image ${
-                currentSlide === index ? "active" : ""
-              }`}
               style={{
                 width: "100%",
                 height: "100%",
@@ -237,12 +219,11 @@ const Layout = () => {
                 transform:
                   currentSlide === index ? "scale(1.05)" : "scale(1.0)",
                 filter: "brightness(1.1) contrast(1.05)",
-                imageRendering: "auto" as any,
               }}
             />
           ))}
 
-          {/* ✅ Bỏ overlay đen hoặc để nhẹ hơn */}
+          {/* Overlay */}
           <div
             style={{
               position: "absolute",
@@ -252,11 +233,10 @@ const Layout = () => {
               height: "100%",
               background:
                 "linear-gradient(to bottom, rgba(0,0,0,0.05), rgba(0,0,0,0.15))",
-              pointerEvents: "none",
             }}
           ></div>
 
-          {/* ⬅️➡️ Nút điều hướng */}
+          {/* Nút điều hướng */}
           <button
             onClick={prevSlide}
             style={{
@@ -297,7 +277,7 @@ const Layout = () => {
         </div>
       )}
 
-      {/* Nội dung chính */}
+      {/* ================= MAIN CONTENT ================= */}
       <div id="container" className="container">
         <Outlet />
       </div>

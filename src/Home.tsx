@@ -51,13 +51,6 @@ const Home: React.FC = () => {
           <h2 className="text-xl font-semibold mb-3 text-blue-600">
             Khu vực dành cho Admin
           </h2>
-          <ul className="list-disc ml-6 text-gray-700">
-            <li>
-              Truy cập trang <b>Account</b> để phân quyền cho người dùng.
-            </li>
-            <li>Thêm, sửa, xóa nội dung trang khác.</li>
-            <li>Xem danh sách người dùng và quyền hiện tại.</li>
-          </ul>
         </div>
       )}
     </div>

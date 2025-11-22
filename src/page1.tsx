@@ -9,6 +9,7 @@ interface Product {
   description: string;
   price: number;
   image: string;
+  stock: number;
 }
 
 const Page1: React.FC = () => {
@@ -21,7 +22,7 @@ const Page1: React.FC = () => {
     const user = localStorage.getItem("user");
     if (user) {
       const parsedUser = JSON.parse(user);
-      setRole(parsedUser.role || "guest");
+      setRole(parsedUser.role || "guest"); // giữ phân quyền
     }
     fetchProducts();
   }, []);
@@ -31,9 +32,8 @@ const Page1: React.FC = () => {
       .from("products")
       .select("*")
       .order("id", { ascending: false });
-    if (error) console.error("Lỗi tải sản phẩm:", error.message);
+    if (error) console.error(error.message);
     else setProducts(data || []);
-
     setLoading(false);
   };
 
@@ -43,101 +43,123 @@ const Page1: React.FC = () => {
     <div style={{ padding: "20px", position: "relative" }}>
       {" "}
       <h1>Danh sách sản phẩm</h1>
-      <div
-        style={{
-          display: "flex",
-          flexWrap: "wrap",
-          gap: "20px",
-          justifyContent: "flex-start",
-        }}
-      >
-        {products.map((product) => (
-          <div
-            key={product.id}
-            style={{
-              border: "1px solid #ccc",
-              borderRadius: "8px",
-              padding: "10px",
-              width: "200px",
-              boxShadow: "2px 2px 6px rgba(0,0,0,0.1)",
-              backgroundColor: "#000",
-              transition: "transform 0.2s ease",
-              color: "#fff",
-              cursor: "pointer",
-            }}
-            onMouseEnter={(e) =>
-              (e.currentTarget.style.transform = "translateY(-4px)")
-            }
-            onMouseLeave={(e) =>
-              (e.currentTarget.style.transform = "translateY(0)")
-            }
-          >
-            <img
-              src={product.image}
-              alt={product.name}
+      <div style={{ display: "flex", flexWrap: "wrap", gap: "20px" }}>
+        {products.map((product) => {
+          const outOfStock = product.stock === 0;
+          return (
+            <div
+              key={product.id}
               style={{
-                width: "100%",
+                border: "1px solid #ccc",
                 borderRadius: "8px",
-                marginBottom: "10px",
-                objectFit: "cover",
-                height: "200px",
+                padding: "10px",
+                width: "200px",
+                backgroundColor: "#000",
+                color: "#fff",
+                position: "relative",
+                cursor: "pointer",
               }}
-            />
+              onClick={() => navigate(`/product/${product.id}`)}
+            >
+              <div style={{ position: "relative" }}>
+                <img
+                  src={product.image}
+                  alt={product.name}
+                  style={{
+                    width: "100%",
+                    borderRadius: "8px",
+                    height: "200px",
+                    objectFit: "cover",
+                  }}
+                />
+                {outOfStock && (
+                  <div
+                    style={{
+                      position: "absolute",
+                      top: "0",
+                      left: "0",
+                      right: "0",
+                      bottom: "0",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      backgroundColor: "rgba(0,0,0,0.6)",
+                      color: "#fff",
+                      fontWeight: "bold",
+                      fontSize: "18px",
+                      borderRadius: "8px",
+                      pointerEvents: "none",
+                    }}
+                  >
+                    Sold Out{" "}
+                  </div>
+                )}{" "}
+              </div>
+              <h3 style={{ fontSize: "16px", marginTop: "10px" }}>
+                {product.name}
+              </h3>
+              <p style={{ fontSize: "13px", color: "#ccc" }}>
+                {product.description}
+              </p>
 
-            <h3 style={{ fontSize: "16px", marginBottom: "5px" }}>
-              {product.name}
-            </h3>
+              <p style={{ fontWeight: "bold", color: "orange" }}>
+                Giá:{" "}
+                {product.price.toLocaleString("vi-VN", {
+                  style: "currency",
+                  currency: "VND",
+                })}
+              </p>
+              <p style={{ fontSize: "13px", color: "#0f0" }}>
+                Tồn kho: {product.stock}
+              </p>
 
-            <p style={{ fontSize: "13px", color: "#ccc" }}>
-              {product.description}
-            </p>
+              <div style={{ display: "flex", gap: "5px", marginTop: "10px" }}>
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    addToCart(product, 1);
+                  }}
+                  style={{
+                    flex: 1,
+                    background: outOfStock ? "#555" : "orange",
+                    border: "none",
+                    borderRadius: 5,
+                    padding: "5px",
+                    color: "#000",
+                    fontWeight: "bold",
+                    cursor: outOfStock ? "not-allowed" : "pointer",
+                  }}
+                  disabled={outOfStock}
+                >
+                  Thêm vào giỏ
+                </button>
 
-            <p style={{ fontWeight: "bold", color: "orange" }}>
-              Giá:{" "}
-              {product.price.toLocaleString("vi-VN", {
-                style: "currency",
-                currency: "VND",
-              })}
-            </p>
-
-            <div style={{ display: "flex", gap: "5px", marginTop: "10px" }}>
-              <button
-                onClick={() => addToCart(product, 1)}
-                style={{
-                  flex: 1,
-                  background: "orange",
-                  border: "none",
-                  borderRadius: 5,
-                  padding: "5px",
-                  color: "#000",
-                  fontWeight: "bold",
-                  cursor: "pointer",
-                }}
-              >
-                Thêm vào giỏ
-              </button>
-
-              <button
-                onClick={() => {
-                  addToCart(product, 1);
-                  navigate("/cart");
-                }}
-                style={{
-                  flex: 1,
-                  background: "red",
-                  border: "none",
-                  borderRadius: 5,
-                  padding: "5px",
-                  color: "#fff",
-                  fontWeight: "bold",
-                  cursor: "pointer",
-                }}
-              >
-                Mua ngay
-              </button>
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    if (!outOfStock) {
+                      addToCart(product, 1);
+                      navigate("/cart");
+                    }
+                  }}
+                  style={{
+                    flex: 1,
+                    background: outOfStock ? "#555" : "red",
+                    border: "none",
+                    borderRadius: 5,
+                    padding: "5px",
+                    color: "#fff",
+                    fontWeight: "bold",
+                    cursor: outOfStock ? "not-allowed" : "pointer",
+                  }}
+                  disabled={outOfStock}
+                >
+                  Mua ngay
+                </button>
+              </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
       {role === "admin" && (
         <button

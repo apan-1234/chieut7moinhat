@@ -10,43 +10,48 @@ import PageUsers from "./pageUsers";
 import Login from "./Login";
 import Register from "./register";
 import Account from "./Account";
-
-// ⭐ Import thêm trang chi tiết sản phẩm
+import Cart from "./Cart";
+import Checkout from "./Checkout";
 import ProductDetail from "./ProductDetail";
 
 const App: React.FC = () => {
-  return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<Layout />}>
-          {/* Trang mặc định */}
-          <Route index element={<Home />} />
+return ( <Router> <Routes>
+{/* Layout chính */}
+<Route path="/" element={<Layout />}>
+{/* Trang mặc định */}
+<Route index element={<Home />} />
+      {/* Danh sách sản phẩm */}
+      <Route path="page1" element={<Page1 />} />
 
-          {/* Danh sách sản phẩm */}
-          <Route path="page1" element={<Page1 />} />
+      {/* Trang chi tiết sản phẩm */}
+      <Route path="product/:id" element={<ProductDetail />} />
 
-          {/* ⭐ Trang chi tiết sản phẩm */}
-          <Route path="product/:id" element={<ProductDetail />} />
+      {/* Thêm sản phẩm */}
+      <Route path="add" element={<Add />} />
 
-          {/* Thêm sản phẩm */}
-          <Route path="add" element={<Add />} />
+      {/* Chỉnh sửa sản phẩm */}
+      <Route path="edit/:id" element={<Edit />} />
 
-          {/* Chỉnh sửa sản phẩm */}
-          <Route path="edit/:id" element={<Edit />} />
+      {/* Quản lý người dùng */}
+      <Route path="users" element={<PageUsers />} />
 
-          {/* Quản lý người dùng */}
-          <Route path="users" element={<PageUsers />} />
+      {/* Giỏ hàng và thanh toán */}
+      <Route path="cart" element={<Cart />} />
+      <Route path="checkout" element={<Checkout />} />
 
-          {/* Auth */}
-          <Route path="login" element={<Login />} />
-          <Route path="register" element={<Register />} />
+      {/* Auth */}
+      <Route path="login" element={<Login />} />
+      <Route path="register" element={<Register />} />
 
-          {/* Trang tài khoản */}
-          <Route path="account" element={<Account />} />
-        </Route>
-      </Routes>
-    </Router>
-  );
+      {/* Trang tài khoản */}
+      <Route path="account" element={<Account />} />
+    </Route>
+
+    {/* Nếu muốn có route fallback 404 */}
+    <Route path="*" element={<h2 style={{ textAlign: "center", marginTop: "50px" }}>Trang không tồn tại</h2>} />
+  </Routes>
+</Router>
+);
 };
 
 export default App;

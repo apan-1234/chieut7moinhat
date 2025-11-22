@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { supabase } from "./supabaseClient";
 import { useNavigate } from "react-router-dom";
+import { addToCart } from "./cartService";
 
 interface Product {
   id: number;
@@ -30,7 +31,6 @@ const Page1: React.FC = () => {
       .from("products")
       .select("*")
       .order("id", { ascending: false });
-
     if (error) console.error("Lỗi tải sản phẩm:", error.message);
     else setProducts(data || []);
 
@@ -41,8 +41,8 @@ const Page1: React.FC = () => {
 
   return (
     <div style={{ padding: "20px", position: "relative" }}>
+      {" "}
       <h1>Danh sách sản phẩm</h1>
-
       <div
         style={{
           display: "flex",
@@ -54,7 +54,6 @@ const Page1: React.FC = () => {
         {products.map((product) => (
           <div
             key={product.id}
-            onClick={() => navigate(`/product/${product.id}`)} // ⭐ CLICK → Product Detail
             style={{
               border: "1px solid #ccc",
               borderRadius: "8px",
@@ -64,7 +63,7 @@ const Page1: React.FC = () => {
               backgroundColor: "#000",
               transition: "transform 0.2s ease",
               color: "#fff",
-              cursor: "pointer", // ⭐ thêm để thấy có thể click
+              cursor: "pointer",
             }}
             onMouseEnter={(e) =>
               (e.currentTarget.style.transform = "translateY(-4px)")
@@ -100,10 +99,46 @@ const Page1: React.FC = () => {
                 currency: "VND",
               })}
             </p>
+
+            <div style={{ display: "flex", gap: "5px", marginTop: "10px" }}>
+              <button
+                onClick={() => addToCart(product, 1)}
+                style={{
+                  flex: 1,
+                  background: "orange",
+                  border: "none",
+                  borderRadius: 5,
+                  padding: "5px",
+                  color: "#000",
+                  fontWeight: "bold",
+                  cursor: "pointer",
+                }}
+              >
+                Thêm vào giỏ
+              </button>
+
+              <button
+                onClick={() => {
+                  addToCart(product, 1);
+                  navigate("/cart");
+                }}
+                style={{
+                  flex: 1,
+                  background: "red",
+                  border: "none",
+                  borderRadius: 5,
+                  padding: "5px",
+                  color: "#fff",
+                  fontWeight: "bold",
+                  cursor: "pointer",
+                }}
+              >
+                Mua ngay
+              </button>
+            </div>
           </div>
         ))}
       </div>
-
       {role === "admin" && (
         <button
           onClick={() => navigate("/add")}

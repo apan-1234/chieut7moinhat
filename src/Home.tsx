@@ -34,25 +34,11 @@ const Home: React.FC = () => {
           Đăng xuất
         </button>
       </div>
-
-      {/* Nội dung trang dành cho user */}
-      <div className="bg-white p-6 rounded-xl shadow-md">
         <h2 className="text-xl font-semibold mb-3">Trang chủ</h2>
         <p>
-          Chào mừng bạn đến với hệ thống quản lý Supabase React! <br />
           <strong>Vai trò hiện tại:</strong>{" "}
           <span className="text-green-600 font-semibold">{user.role}</span>
         </p>
-      </div>
-
-      {/* Nếu là admin thì hiển thị thêm khu vực quản trị */}
-      {user.role === "admin" && (
-        <div className="bg-gray-100 mt-6 p-6 rounded-xl shadow-inner">
-          <h2 className="text-xl font-semibold mb-3 text-blue-600">
-            Khu vực dành cho Admin
-          </h2>
-        </div>
-      )}
     </div>
   );
 };

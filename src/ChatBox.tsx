@@ -25,15 +25,22 @@ const ChatBox: React.FC = () => {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            contents: [{ role: "user", parts: [{ text: userText }] }],
+            contents: [
+              {
+                role: "user",
+                parts: [{ text: userText }],
+              },
+            ],
           }),
         }
       );
 
       const data = await res.json();
+
+      // 🎯 FIX CHÍNH Ở ĐÂY: LẤY ĐÚNG FORMAT MỚI
       const botText =
-        data?.candidates?.[0]?.content?.parts?.[0]?.text ||
-        "Xin lỗi, tôi không thể trả lời câu hỏi này.";
+        data?.candidates?.[0]?.content?.parts?.[0]?.text ??
+        "❗ AI không phản hồi. Kiểm tra API KEY hoặc quota.";
 
       const botMsg: Message = { role: "bot", content: botText };
       setMessages((prev) => [...prev, botMsg]);

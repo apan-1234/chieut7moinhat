@@ -7,7 +7,6 @@ import Page1 from "./page1";
 import Add from "./add";
 import Edit from "./edit";
 import PageUsers from "./pageUsers";
-import UserDetail from "./UserDetail"; // ✅ Thêm trang chi tiết user
 import Login from "./Login";
 import Register from "./register";
 import Account from "./Account";
@@ -15,9 +14,15 @@ import Cart from "./Cart";
 import Checkout from "./Checkout";
 import ProductDetail from "./ProductDetail";
 
+import ChatBox from "./ChatBox"; // 👈 Thêm chat box
+import ChatBubble from "./ChatBubble"; // 👈 Bong bóng chat
+
 const App: React.FC = () => {
   return (
     <Router>
+      {/* Bong bóng chat luôn hiển thị trên mọi trang */}
+      <ChatBubble />
+
       <Routes>
         {/* Layout chính */}
         <Route path="/" element={<Layout />}>
@@ -27,7 +32,7 @@ const App: React.FC = () => {
           {/* Danh sách sản phẩm */}
           <Route path="page1" element={<Page1 />} />
 
-          {/* Trang chi tiết sản phẩm */}
+          {/* Chi tiết sản phẩm */}
           <Route path="product/:id" element={<ProductDetail />} />
 
           {/* Thêm sản phẩm */}
@@ -39,10 +44,7 @@ const App: React.FC = () => {
           {/* Quản lý người dùng */}
           <Route path="users" element={<PageUsers />} />
 
-          {/* ⭐ Trang chi tiết thành viên */}
-          <Route path="users/:id" element={<UserDetail />} />
-
-          {/* Giỏ hàng và thanh toán */}
+          {/* Giỏ hàng */}
           <Route path="cart" element={<Cart />} />
           <Route path="checkout" element={<Checkout />} />
 
@@ -52,9 +54,12 @@ const App: React.FC = () => {
 
           {/* Trang tài khoản */}
           <Route path="account" element={<Account />} />
+
+          {/* Chat riêng – nếu muốn mở toàn màn hình */}
+          <Route path="chat" element={<ChatBox />} />
         </Route>
 
-        {/* Trang 404 */}
+        {/* Fallback 404 */}
         <Route
           path="*"
           element={

@@ -22,16 +22,6 @@ const Home: React.FC = () => {
 
   if (!user) return null;
 
-  // Demo images (ngẫu nhiên từ Unsplash)
-  const images = [
-    "https://source.unsplash.com/400x250/?nature,water",
-    "https://source.unsplash.com/400x250/?city,night",
-    "https://source.unsplash.com/400x250/?technology,computer",
-    "https://source.unsplash.com/400x250/?music,concert",
-    "https://source.unsplash.com/400x250/?art,design",
-    "https://source.unsplash.com/400x250/?travel,adventure",
-  ];
-
   const cards = [
     {
       title: "Khám phá âm nhạc",
@@ -77,17 +67,10 @@ const Home: React.FC = () => {
         {cards.map((card, index) => (
           <div
             key={index}
-            className="bg-gray-800 rounded-3xl overflow-hidden shadow-2xl flex flex-col items-center transform hover:-translate-y-3 hover:shadow-3xl transition-all duration-300"
+            className="bg-gray-800 rounded-3xl p-6 shadow-2xl flex flex-col items-center text-center transform hover:-translate-y-2 hover:shadow-3xl transition-all duration-300"
           >
-            <img
-              src={images[index % images.length]}
-              alt={card.title}
-              className="w-full h-48 object-cover"
-            />
-            <div className="p-6 text-center flex flex-col items-center">
-              <h3 className="text-2xl font-bold mb-2">{card.title}</h3>
-              <p className="text-gray-300">{card.desc}</p>
-            </div>
+            <h3 className="text-2xl font-bold mb-3">{card.title}</h3>
+            <p className="text-gray-300">{card.desc}</p>
           </div>
         ))}
       </div>
@@ -99,8 +82,8 @@ const Home: React.FC = () => {
         </h3>
         <p className="text-gray-200 text-lg md:text-xl leading-relaxed">
           Chào mừng bạn đến với trang quản lý! Khám phá các thông tin thú vị,
-          học hỏi kỹ năng mới, và tận hưởng trải nghiệm trực quan với hình ảnh
-          sống động, giao diện hiện đại và responsive.
+          học hỏi kỹ năng mới, và tận hưởng trải nghiệm trực quan với giao diện
+          hiện đại, gọn gàng và responsive.
         </p>
       </div>
     </div>

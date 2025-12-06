@@ -13,7 +13,7 @@ import Account from "./Account";
 import Cart from "./Cart";
 import Checkout from "./Checkout";
 import ProductDetail from "./ProductDetail";
-
+import UserDetail from "./UserDetail"; // 👈 import UserDetail
 import ChatBox from "./ChatBox"; // 👈 Thêm chat box
 import ChatBubble from "./ChatBubble"; // 👈 Bong bóng chat
 
@@ -43,6 +43,8 @@ const App: React.FC = () => {
 
           {/* Quản lý người dùng */}
           <Route path="users" element={<PageUsers />} />
+          {/* Chi tiết user */}
+          <Route path="users/:id" element={<UserDetail />} />
 
           {/* Giỏ hàng */}
           <Route path="cart" element={<Cart />} />

@@ -1,91 +1,384 @@
+// src/Home.tsx
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { supabase } from "./supabaseClient";
+import { supabaseAdmin } from "./supabaseAdmin";
+import { addToCart } from "./cartService";
+
+interface Product {
+  id: number;
+  name: string;
+  description: string;
+  price: number;
+  image: string;
+  stock: number;
+}
 
 interface User {
+  id: number;
   name: string;
+  age: number;
+  job: string;
   email: string;
-  role: string;
+  avatar: string;
 }
 
 const Home: React.FC = () => {
   const navigate = useNavigate();
-  const [user, setUser] = useState<User | null>(null);
+
+  // === Sản phẩm ===
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loadingProducts, setLoadingProducts] = useState(true);
+
+  // === Thành viên ===
+  const [users, setUsers] = useState<User[]>([]);
+  const [loadingUsers, setLoadingUsers] = useState(true);
+
+  const [showUserForm, setShowUserForm] = useState(false);
+  const [file, setFile] = useState<File | null>(null);
+  const [name, setName] = useState("");
+  const [age, setAge] = useState<number>(18);
+  const [email, setEmail] = useState("");
+
+  const [role, setRole] = useState<string>("guest");
 
   useEffect(() => {
-    const storedUser = localStorage.getItem("user");
-    if (!storedUser) {
-      navigate("/login");
+    const user = localStorage.getItem("user");
+    if (user) {
+      const parsedUser = JSON.parse(user);
+      setRole(parsedUser.role || "guest");
+    }
+    fetchProducts();
+    fetchUsers();
+  }, []);
+
+  // === Lấy sản phẩm ===
+  const fetchProducts = async () => {
+    const { data, error } = await supabase
+      .from("products")
+      .select("*")
+      .order("id", { ascending: false });
+    if (error) console.error(error.message);
+    else setProducts(data || []);
+    setLoadingProducts(false);
+  };
+
+  // === Lấy user ===
+  const fetchUsers = async () => {
+    const { data, error } = await supabase
+      .from("users")
+      .select("*")
+      .order("id", { ascending: false });
+    if (!error) setUsers(data || []);
+    setLoadingUsers(false);
+  };
+
+  const handleAddUser = async () => {
+    if (!name || !email || !file) {
+      alert("Vui lòng điền đủ thông tin và chọn ảnh.");
       return;
     }
-    setUser(JSON.parse(storedUser));
-  }, [navigate]);
 
-  if (!user) return null;
+    try {
+      const fileName = `${Date.now()}_${file.name}`;
+      const { error: uploadError } = await supabaseAdmin.storage
+        .from("users")
+        .upload(fileName, file);
+      if (uploadError) throw uploadError;
 
-  const cards = [
-    {
-      title: "Khám phá âm nhạc",
-      desc: "Cập nhật các bài hát mới, album hot và xu hướng âm nhạc hiện nay.",
-    },
-    {
-      title: "Sự kiện nổi bật",
-      desc: "Xem các sự kiện, concert, workshop hấp dẫn sắp diễn ra gần bạn.",
-    },
-    {
-      title: "Học hỏi kỹ năng",
-      desc: "Những tips, tutorial về nhảy, hát, mix nhạc, và phong cách cá nhân.",
-    },
-    {
-      title: "Thư viện hình ảnh",
-      desc: "Ngắm nhìn các hình ảnh đẹp, nghệ thuật, và truyền cảm hứng.",
-    },
-    {
-      title: "Công nghệ & Mạng xã hội",
-      desc: "Cập nhật các xu hướng công nghệ, mạng xã hội và giải trí.",
-    },
-    {
-      title: "Du lịch & Trải nghiệm",
-      desc: "Khám phá những địa điểm mới và trải nghiệm độc đáo.",
-    },
-  ];
+      const { data: avatarData } = supabaseAdmin.storage
+        .from("users")
+        .getPublicUrl(fileName);
+
+      const { error: insertError } = await supabaseAdmin.from("users").insert([
+        {
+          name,
+          age,
+          job: "Rapper",
+          email,
+          avatar: avatarData.publicUrl,
+        },
+      ]);
+      if (insertError) throw insertError;
+
+      setShowUserForm(false);
+      setName("");
+      setAge(18);
+      setEmail("");
+      setFile(null);
+      fetchUsers();
+    } catch (err: any) {
+      alert("Lỗi thêm user: " + err.message);
+    }
+  };
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white flex flex-col items-center p-6">
-      {/* Header */}
-      <div className="text-center mt-10 mb-16">
-        <h1 className="text-5xl md:text-6xl font-extrabold mb-4">
-          Chào mừng, {user.name}!
-        </h1>
-        <p className="text-lg text-gray-300">
-          Vai trò:{" "}
-          <span className="text-green-400 font-semibold">{user.role}</span>
-        </p>
-      </div>
+    <div
+      style={{
+        padding: "20px",
+        backgroundColor: "#000",
+        color: "#fff",
+        minHeight: "100vh",
+      }}
+    >
+      {/* === Phần Sản phẩm === */}
+      <h2 style={{ marginBottom: "10px" }}>Sản Phẩm</h2>
+      {loadingProducts ? (
+        <p>Đang tải dữ liệu...</p>
+      ) : (
+        <div
+          style={{
+            display: "flex",
+            flexWrap: "wrap",
+            gap: "20px",
+            marginBottom: "30px",
+          }}
+        >
+          {products.map((product) => {
+            const outOfStock = product.stock === 0;
+            return (
+              <div
+                key={product.id}
+                style={{
+                  border: "1px solid #ccc",
+                  borderRadius: "8px",
+                  padding: "10px",
+                  width: "200px",
+                  backgroundColor: "#000",
+                  color: "#fff",
+                  position: "relative",
+                  cursor: "pointer",
+                }}
+                onClick={() => navigate(`/product/${product.id}`)}
+              >
+                <div style={{ position: "relative" }}>
+                  <img
+                    src={product.image}
+                    alt={product.name}
+                    style={{
+                      width: "100%",
+                      borderRadius: "8px",
+                      height: "200px",
+                      objectFit: "cover",
+                    }}
+                  />
+                  {outOfStock && (
+                    <div
+                      style={{
+                        position: "absolute",
+                        top: "0",
+                        left: "0",
+                        right: "0",
+                        bottom: "0",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        backgroundColor: "rgba(0,0,0,0.6)",
+                        color: "#fff",
+                        fontWeight: "bold",
+                        fontSize: "18px",
+                        borderRadius: "8px",
+                        pointerEvents: "none",
+                      }}
+                    >
+                      Sold Out
+                    </div>
+                  )}
+                </div>
+                <h3 style={{ fontSize: "16px", marginTop: "10px" }}>
+                  {product.name}
+                </h3>
+                <p style={{ fontSize: "13px", color: "#ccc" }}>
+                  {product.description}
+                </p>
+                <p style={{ fontWeight: "bold", color: "orange" }}>
+                  Giá:{" "}
+                  {product.price.toLocaleString("vi-VN", {
+                    style: "currency",
+                    currency: "VND",
+                  })}
+                </p>
+                <p style={{ fontSize: "13px", color: "#0f0" }}>
+                  Tồn kho: {product.stock}
+                </p>
+                <div style={{ display: "flex", gap: "5px", marginTop: "10px" }}>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      addToCart(product, 1);
+                    }}
+                    style={{
+                      flex: 1,
+                      background: outOfStock ? "#555" : "orange",
+                      border: "none",
+                      borderRadius: 5,
+                      padding: "5px",
+                      color: "#000",
+                      fontWeight: "bold",
+                      cursor: outOfStock ? "not-allowed" : "pointer",
+                    }}
+                    disabled={outOfStock}
+                  >
+                    Thêm vào giỏ
+                  </button>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      if (!outOfStock) {
+                        addToCart(product, 1);
+                        navigate("/cart");
+                      }
+                    }}
+                    style={{
+                      flex: 1,
+                      background: outOfStock ? "#555" : "red",
+                      border: "none",
+                      borderRadius: 5,
+                      padding: "5px",
+                      color: "#fff",
+                      fontWeight: "bold",
+                      cursor: outOfStock ? "not-allowed" : "pointer",
+                    }}
+                    disabled={outOfStock}
+                  >
+                    Mua ngay
+                  </button>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      )}
 
-      {/* Cards Section */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 w-full max-w-6xl mb-16">
-        {cards.map((card, index) => (
-          <div
-            key={index}
-            className="bg-gray-800 rounded-3xl p-6 shadow-2xl flex flex-col items-center text-center transform hover:-translate-y-2 hover:shadow-3xl transition-all duration-300"
+      <hr style={{ borderColor: "#555", margin: "30px 0" }} />
+
+      {/* === Phần Thành viên === */}
+      <h2 style={{ marginBottom: "10px" }}>Thành Viên</h2>
+      {loadingUsers ? (
+        <p>Đang tải dữ liệu...</p>
+      ) : users.length === 0 ? (
+        <p>Hiện chưa có thành viên nào.</p>
+      ) : (
+        <div
+          style={{
+            display: "flex",
+            flexWrap: "wrap",
+            gap: "20px",
+            marginBottom: "30px",
+          }}
+        >
+          {users.map((user) => (
+            <div
+              key={user.id}
+              onClick={() => navigate(`/users/${user.id}`)}
+              style={{
+                border: "1px solid #ccc",
+                borderRadius: "8px",
+                padding: "10px",
+                width: "200px",
+                backgroundColor: "#000",
+                color: "#fff",
+                cursor: "pointer",
+                textAlign: "center",
+                transition: "0.2s",
+              }}
+            >
+              <img
+                src={user.avatar}
+                alt={user.name}
+                style={{
+                  width: "100%",
+                  borderRadius: "8px",
+                  height: "200px",
+                  objectFit: "cover",
+                  marginBottom: "10px",
+                }}
+              />
+              <h3>{user.name}</h3>
+              <p style={{ color: "#ccc" }}>Tuổi: {user.age}</p>
+              <p style={{ color: "#ccc" }}>{user.job}</p>
+              <p style={{ color: "orange" }}>{user.email}</p>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Form thêm user */}
+      {showUserForm && role === "admin" && (
+        <div
+          style={{
+            position: "fixed",
+            bottom: "110px",
+            right: "30px",
+            backgroundColor: "#fff",
+            color: "#000",
+            padding: "15px",
+            borderRadius: "8px",
+            width: "260px",
+          }}
+        >
+          <h3 style={{ textAlign: "center" }}>Thêm thành viên</h3>
+          <input
+            type="text"
+            placeholder="Tên"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            style={{ width: "100%", marginBottom: "8px" }}
+          />
+          <input
+            type="number"
+            placeholder="Tuổi"
+            value={age}
+            onChange={(e) => setAge(Number(e.target.value))}
+            style={{ width: "100%", marginBottom: "8px" }}
+          />
+          <input
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            style={{ width: "100%", marginBottom: "8px" }}
+          />
+          <input
+            type="file"
+            accept="image/*"
+            onChange={(e) => setFile(e.target.files?.[0] || null)}
+            style={{ width: "100%", marginBottom: "8px" }}
+          />
+          <button
+            onClick={handleAddUser}
+            style={{
+              width: "100%",
+              backgroundColor: "#28a745",
+              color: "#fff",
+              padding: "8px",
+              borderRadius: "4px",
+            }}
           >
-            <h3 className="text-2xl font-bold mb-3">{card.title}</h3>
-            <p className="text-gray-300">{card.desc}</p>
-          </div>
-        ))}
-      </div>
+            Lưu
+          </button>
+        </div>
+      )}
 
-      {/* Message Section */}
-      <div className="bg-gradient-to-r from-purple-700 via-pink-700 to-red-600 rounded-3xl p-10 shadow-inner max-w-4xl flex flex-col items-center text-center">
-        <h3 className="text-3xl md:text-4xl font-bold mb-4">
-          Lời nhắn từ hệ thống
-        </h3>
-        <p className="text-gray-200 text-lg md:text-xl leading-relaxed">
-          Chào mừng bạn đến với trang quản lý! Khám phá các thông tin thú vị,
-          học hỏi kỹ năng mới, và tận hưởng trải nghiệm trực quan với giao diện
-          hiện đại, gọn gàng và responsive.
-        </p>
-      </div>
+      {/* Button thêm user (admin) */}
+      {role === "admin" && (
+        <button
+          onClick={() => setShowUserForm(!showUserForm)}
+          style={{
+            position: "fixed",
+            bottom: "30px",
+            right: "30px",
+            width: "55px",
+            height: "55px",
+            borderRadius: "50%",
+            backgroundColor: "#007bff",
+            color: "#fff",
+            fontSize: "28px",
+          }}
+        >
+          {showUserForm ? "×" : "+"}
+        </button>
+      )}
     </div>
   );
 };

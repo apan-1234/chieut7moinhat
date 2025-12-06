@@ -5,10 +5,12 @@ import { supabase } from "./supabaseClient";
 
 const Edit: React.FC = () => {
   const { id } = useParams<{ id: string }>();
+
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState<number>(0);
   const [image, setImage] = useState("");
+  const [stock, setStock] = useState<number>(0); // ✅ THÊM TỒN KHO
   const [message, setMessage] = useState("");
 
   useEffect(() => {
@@ -28,6 +30,7 @@ const Edit: React.FC = () => {
       setDescription(data.description);
       setPrice(data.price);
       setImage(data.image);
+      setStock(data.stock); // ✅ LẤY TỒN KHO
     }
   };
 
@@ -35,7 +38,13 @@ const Edit: React.FC = () => {
     e.preventDefault();
     const { error } = await supabase
       .from("products")
-      .update({ name, description, price, image })
+      .update({
+        name,
+        description,
+        price,
+        image,
+        stock, // ✅ CẬP NHẬT TỒN KHO
+      })
       .eq("id", id);
 
     if (error) setMessage("❌ Lỗi: " + error.message);
@@ -56,6 +65,7 @@ const Edit: React.FC = () => {
             style={{ width: "100%", marginBottom: "10px" }}
           />
         </div>
+
         <div>
           <label>Mô tả:</label>
           <textarea
@@ -65,6 +75,7 @@ const Edit: React.FC = () => {
             style={{ width: "100%", marginBottom: "10px" }}
           />
         </div>
+
         <div>
           <label>Giá (VNĐ):</label>
           <input
@@ -75,6 +86,7 @@ const Edit: React.FC = () => {
             style={{ width: "100%", marginBottom: "10px" }}
           />
         </div>
+
         <div>
           <label>Link hình ảnh:</label>
           <input
@@ -84,8 +96,22 @@ const Edit: React.FC = () => {
             style={{ width: "100%", marginBottom: "10px" }}
           />
         </div>
+
+        {/* ✅ INPUT TỒN KHO */}
+        <div>
+          <label>Tồn kho:</label>
+          <input
+            type="number"
+            value={stock}
+            onChange={(e) => setStock(Number(e.target.value))}
+            required
+            style={{ width: "100%", marginBottom: "10px" }}
+          />
+        </div>
+
         <button type="submit">Lưu thay đổi</button>
       </form>
+
       {message && <p>{message}</p>}
     </div>
   );

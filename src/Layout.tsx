@@ -22,12 +22,28 @@ const Layout = () => {
   const [cartCount, setCartCount] = useState(0);
 
   useEffect(() => {
-    const storedUser = localStorage.getItem("user");
-    if (storedUser) setUser(JSON.parse(storedUser));
+    const loadUser = () => {
+      const storedUser = localStorage.getItem("user");
+      setUser(storedUser ? JSON.parse(storedUser) : null);
+    };
+
+    loadUser(); // chạy ngay lần đầu
+
+    window.addEventListener("storage", loadUser);
+    window.addEventListener("userUpdated", loadUser);
+
+    return () => {
+      window.removeEventListener("storage", loadUser);
+      window.removeEventListener("userUpdated", loadUser);
+    };
   }, []);
 
   const handleLogout = () => {
     localStorage.removeItem("user");
+
+    // 🔥 BẮN TÍN HIỆU CHO APP BIẾT ĐÃ LOGOUT
+    window.dispatchEvent(new Event("userUpdated"));
+
     navigate("/login");
   };
 
@@ -158,6 +174,7 @@ const Layout = () => {
             ))}
           </ul>
 
+          {/* GIỎ HÀNG */}
           <Link
             to="/cart"
             style={{
@@ -188,6 +205,25 @@ const Layout = () => {
               </span>
             )}
           </Link>
+
+          {/* NÚT ĐĂNG NHẬP / ĐĂNG XUẤT TÁCH RIÊNG */}
+          {!user && (
+            <Link
+              to="/login"
+              style={{
+                position: "absolute",
+                right: "20px",
+                background: "green",
+                color: "white",
+                padding: "10px 15px",
+                borderRadius: "6px",
+                textDecoration: "none",
+                fontWeight: "bold",
+              }}
+            >
+              Đăng nhập
+            </Link>
+          )}
 
           {user && (
             <button
@@ -239,46 +275,75 @@ const Layout = () => {
         <Outlet />
       </div>
       {/* FOOTER */}
+      {/* FOOTER */}
       <div
         style={{
-          marginTop: "40px",
+          marginTop: "60px",
           backgroundColor: "#111",
           color: "white",
-          padding: "40px 20px",
-          display: "flex",
-          justifyContent: "space-between",
-          flexWrap: "wrap",
+          padding: "60px 40px",
         }}
       >
-        <div style={{ flex: "1 1 250px", marginBottom: "20px" }}>
-          <img
-            src={anhlogo}
-            alt="Logo Footer"
-            style={{ width: "160px", height: "auto", objectFit: "contain" }}
-          />
-          <p style={{ marginTop: "10px", fontSize: "14px", color: "#ccc" }}>
-            Công ty chúng tôi cung cấp sản phẩm chất lượng và dịch vụ uy tín.
-          </p>
+        <div
+          style={{
+            display: "flex",
+            flexWrap: "wrap",
+            gap: "40px",
+            alignItems: "flex-start",
+            justifyContent: "space-between",
+            maxWidth: "1300px",
+            margin: "0 auto",
+          }}
+        >
+          {/* LEFT - LOGO + DESCRIPTION */}
+          <div style={{ flex: "1 1 350px" }}>
+            <img
+              src={anhlogo}
+              alt="Logo Footer"
+              style={{
+                width: "200px",
+                height: "auto",
+                objectFit: "contain",
+                marginBottom: "15px",
+              }}
+            />
+            <p style={{ fontSize: "15px", color: "#ccc", lineHeight: "1.6" }}>
+              Công ty chúng tôi cung cấp sản phẩm chất lượng cao cùng dịch vụ hỗ
+              trợ tận tâm. Rất hân hạnh được phục vụ quý khách!
+            </p>
+          </div>
+
+          {/* RIGHT - GOOGLE MAP */}
+          <div style={{ flex: "1 1 500px" }}>
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d6591.547227653123!2d106.70215355124742!3d10.78391243881112!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31752f4b3330bcc7%3A0x4db964d76bf6e18e!2sSaigon%20Zoo%20%26%20Botanical%20Gardens!5e0!3m2!1sen!2s!4v1765006329678!5m2!1sen!2s"
+              width="100%"
+              height="320"
+              style={{
+                border: "0",
+                borderRadius: "12px",
+                width: "100%",
+                boxShadow: "0 0 15px rgba(255,255,255,0.1)",
+              }}
+              allowFullScreen
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+            ></iframe>
+          </div>
         </div>
 
-        <div style={{ flex: "2 1 400px", marginBottom: "20px" }}>
-          <img
-            src={bannerImg}
-            alt="Banner Footer"
-            style={{
-              width: "100%",
-              height: "auto",
-              objectFit: "cover",
-              borderRadius: "10px",
-            }}
-          />
-        </div>
-
-        <div style={{ flex: "1 1 200px", marginBottom: "20px" }}>
-          <h3>Liên hệ</h3>
-          <p>Email: support@example.com</p>
-          <p>Hotline: 0123 456 789</p>
-          <p>Địa chỉ: 123 Đường ABC, Quận XYZ</p>
+        {/* COPYRIGHT */}
+        <div
+          style={{
+            textAlign: "center",
+            marginTop: "40px",
+            paddingTop: "20px",
+            borderTop: "1px solid #333",
+            fontSize: "14px",
+            color: "#888",
+          }}
+        >
+          © 2025 Your Company. All rights reserved.
         </div>
       </div>
     </div>

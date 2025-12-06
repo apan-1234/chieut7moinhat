@@ -19,7 +19,7 @@ const ChatBubble: React.FC = () => {
           style={{
             position: "fixed",
             right: 25,
-            bottom: 25,
+            bottom: 100,
             width: 65,
             height: 65,
             borderRadius: "50%",

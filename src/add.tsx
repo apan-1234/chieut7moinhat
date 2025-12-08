@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { supabase } from "./supabaseClient";
 
 const Add: React.FC = () => {
@@ -7,9 +7,32 @@ const Add: React.FC = () => {
   const [price, setPrice] = useState<number>(0);
   const [file, setFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string>("");
+
+  const [categories, setCategories] = useState<any[]>([]);
+  const [categoryId, setCategoryId] = useState<number | null>(null);
+
   const [message, setMessage] = useState("");
 
-  // Khi chọn file ảnh
+  // ========================
+  // 🔥 Lấy danh mục từ Supabase
+  // ========================
+  useEffect(() => {
+    fetchCategories();
+  }, []);
+
+  const fetchCategories = async () => {
+    const { data, error } = await supabase
+      .from("categories")
+      .select("*")
+      .order("id", { ascending: true });
+
+    if (error) console.log(error.message);
+    else setCategories(data || []);
+  };
+
+  // ========================
+  // Chọn ảnh
+  // ========================
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0];
     if (selectedFile) {
@@ -18,7 +41,9 @@ const Add: React.FC = () => {
     }
   };
 
+  // ========================
   // Thêm sản phẩm
+  // ========================
   const handleAdd = async (e: React.FormEvent) => {
     e.preventDefault();
     setMessage("⏳ Đang thêm sản phẩm...");
@@ -26,8 +51,10 @@ const Add: React.FC = () => {
     try {
       let imageUrl = "";
 
+      // Upload ảnh trước
       if (file) {
         const fileName = `${Date.now()}_${file.name}`;
+
         const { error: uploadError } = await supabase.storage
           .from("products")
           .upload(fileName, file);
@@ -37,24 +64,30 @@ const Add: React.FC = () => {
         const { data } = supabase.storage
           .from("products")
           .getPublicUrl(fileName);
+
         imageUrl = data.publicUrl;
       }
 
+      // Insert sản phẩm
       const { error: insertError } = await supabase.from("products").insert([
         {
           name,
           description,
           price,
           image: imageUrl,
+          category_id: categoryId, // <--- Thêm danh mục
         },
       ]);
 
       if (insertError) throw insertError;
 
       setMessage("✅ Thêm sản phẩm thành công!");
+
+      // Reset form
       setName("");
       setDescription("");
       setPrice(0);
+      setCategoryId(null);
       setFile(null);
       setPreview("");
     } catch (err: any) {
@@ -65,7 +98,9 @@ const Add: React.FC = () => {
   return (
     <div style={styles.container}>
       <h2 style={styles.title}>🛍️ Thêm sản phẩm mới</h2>
+
       <form onSubmit={handleAdd} style={styles.form}>
+        {/* Tên */}
         <label style={styles.label}>Tên sản phẩm</label>
         <input
           type="text"
@@ -75,6 +110,7 @@ const Add: React.FC = () => {
           style={styles.input}
         />
 
+        {/* Mô tả */}
         <label style={styles.label}>Mô tả</label>
         <textarea
           value={description}
@@ -83,6 +119,7 @@ const Add: React.FC = () => {
           style={{ ...styles.input, height: "80px", resize: "none" }}
         />
 
+        {/* Giá */}
         <label style={styles.label}>Giá (VNĐ)</label>
         <input
           type="number"
@@ -92,6 +129,23 @@ const Add: React.FC = () => {
           style={styles.input}
         />
 
+        {/* Danh mục */}
+        <label style={styles.label}>Danh mục</label>
+        <select
+          style={styles.input}
+          value={categoryId ?? ""}
+          onChange={(e) => setCategoryId(Number(e.target.value))}
+          required
+        >
+          <option value="">-- Chọn danh mục --</option>
+          {categories.map((cate) => (
+            <option key={cate.id} value={cate.id}>
+              {cate.name}
+            </option>
+          ))}
+        </select>
+
+        {/* Ảnh */}
         <label style={styles.label}>Hình ảnh sản phẩm</label>
         <input
           type="file"

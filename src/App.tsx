@@ -1,3 +1,4 @@
+// src/App.tsx
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
@@ -13,65 +14,45 @@ import Account from "./Account";
 import Cart from "./Cart";
 import Checkout from "./Checkout";
 import ProductDetail from "./ProductDetail";
-import UserDetail from "./UserDetail"; // 👈 import UserDetail
-import ChatBox from "./ChatBox"; // 👈 Thêm chat box
-import ChatBubble from "./ChatBubble"; // 👈 Bong bóng chat
+import UserDetail from "./UserDetail";
+import ChatBox from "./ChatBox";
+import ChatBubble from "./ChatBubble";
 import Categories from "./Categories";
 import CategoryProducts from "./CategoryProducts";
 import AddCategory from "./AddCategory";
+import EditCategory from "./EditCategory";
+
 const App: React.FC = () => {
   return (
     <Router>
-      {/* Bong bóng chat luôn hiển thị trên mọi trang */}
       <ChatBubble />
 
       <Routes>
-        {/* Layout chính */}
         <Route path="/" element={<Layout />}>
-          {/* Trang mặc định */}
           <Route index element={<Home />} />
-
-          {/* Danh sách sản phẩm */}
           <Route path="page1" element={<Page1 />} />
-
-          {/* Chi tiết sản phẩm */}
           <Route path="product/:id" element={<ProductDetail />} />
-
-          {/* Thêm sản phẩm */}
           <Route path="add" element={<Add />} />
-
-          {/* Chỉnh sửa sản phẩm */}
           <Route path="edit/:id" element={<Edit />} />
-
-          {/* Quản lý người dùng */}
           <Route path="users" element={<PageUsers />} />
-          {/* Chi tiết user */}
           <Route path="users/:id" element={<UserDetail />} />
-
-          {/* Giỏ hàng */}
           <Route path="cart" element={<Cart />} />
           <Route path="checkout" element={<Checkout />} />
-
-          {/* Auth */}
           <Route path="login" element={<Login />} />
           <Route path="register" element={<Register />} />
-
-          {/* Trang tài khoản */}
           <Route path="account" element={<Account />} />
-
-          {/* Chat riêng – nếu muốn mở toàn màn hình */}
           <Route path="chat" element={<ChatBox />} />
-          {/* Danh mỤC */}
-          <Route path="/categories" element={<Categories />} />
-          <Route path="/category/:id" element={<CategoryProducts />} />
-          <Route path="/add-category" element={<AddCategory />} />
+          <Route path="categories" element={<Categories />} />
+          <Route path="category/:id" element={<CategoryProducts />} />
+          <Route path="add-category" element={<AddCategory />} />
+          <Route path="edit-category/:id" element={<EditCategory />} />
+          {/* sửa danh mục */}
         </Route>
 
-        {/* Fallback 404 */}
         <Route
           path="*"
           element={
-            <h2 style={{ textAlign: "center", marginTop: "50px" }}>
+            <h2 style={{ textAlign: "center", marginTop: 50 }}>
               Trang không tồn tại
             </h2>
           }

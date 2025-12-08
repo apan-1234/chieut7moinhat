@@ -155,6 +155,7 @@ const Layout = () => {
             {[
               { to: "/", label: "Trang Chủ" },
               { to: "/page1", label: "Shop" },
+              { to: "/categories", label: "Danh Mục" }, // ✅ THÊM DANH MỤC
               { to: "/users", label: "Thành Viên" },
               { to: "#", label: "Đơn Hàng" },
             ].map((item, i) => (

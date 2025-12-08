@@ -25,7 +25,7 @@ const AddCategory: React.FC = () => {
     try {
       let imageUrl = "";
 
-      // Upload ảnh
+      // Upload ảnh nếu có chọn
       if (file) {
         const fileName = `cate_${Date.now()}_${file.name}`;
 
@@ -64,85 +64,74 @@ const AddCategory: React.FC = () => {
   };
 
   return (
-    <div style={styles.container}>
-      <h2 style={styles.title}>📁 Thêm danh mục mới</h2>
+    <div style={{ padding: 20, maxWidth: 500, margin: "0 auto" }}>
+      <h2>Thêm danh mục</h2>
 
-      <form onSubmit={handleAdd} style={styles.form}>
-        <label style={styles.label}>Tên danh mục</label>
+      <form onSubmit={handleAdd}>
+        <label>Tên danh mục</label>
         <input
-          style={styles.input}
+          style={input}
           value={name}
           required
           onChange={(e) => setName(e.target.value)}
         />
 
-        <label style={styles.label}>Mô tả</label>
+        <label>Mô tả</label>
         <textarea
-          style={{ ...styles.input, height: 80 }}
+          style={input}
           value={description}
           onChange={(e) => setDescription(e.target.value)}
         />
 
-        <label style={styles.label}>Ảnh đại diện</label>
+        <label>Ảnh đại diện</label>
         <input
           type="file"
           accept="image/*"
           onChange={handleFileChange}
-          style={styles.input}
+          style={input}
         />
 
         {preview && (
           <div style={{ textAlign: "center" }}>
-            <img src={preview} alt="preview" style={styles.previewImage} />
+            <img
+              src={preview}
+              alt="preview"
+              style={{
+                width: 160,
+                height: 160,
+                objectFit: "cover",
+                borderRadius: 10,
+                marginBottom: 15,
+              }}
+            />
           </div>
         )}
 
-        <button type="submit" style={styles.button}>
-          ➕ Thêm danh mục
-        </button>
+        <button style={button}>Tạo danh mục</button>
       </form>
 
-      {message && <p style={styles.message}>{message}</p>}
+      {message && <p>{message}</p>}
     </div>
   );
 };
 
-const styles: { [key: string]: React.CSSProperties } = {
-  container: {
-    maxWidth: 500,
-    margin: "40px auto",
-    padding: 30,
-    background: "#fff",
-    borderRadius: 12,
-    boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
-    fontFamily: "Arial",
-  },
-  title: { textAlign: "center", marginBottom: 20 },
-  form: { display: "flex", flexDirection: "column" },
-  label: { margin: "8px 0 4px", fontWeight: "bold" },
-  input: {
-    padding: 10,
-    borderRadius: 8,
-    border: "1px solid #ccc",
-    marginBottom: 15,
-  },
-  previewImage: {
-    width: 150,
-    height: 150,
-    objectFit: "cover",
-    borderRadius: 10,
-    marginBottom: 15,
-  },
-  button: {
-    padding: 12,
-    background: "#007bff",
-    color: "#fff",
-    border: "none",
-    borderRadius: 8,
-    cursor: "pointer",
-    fontWeight: "bold",
-  },
-  message: { textAlign: "center", marginTop: 15, fontWeight: "bold" },
+const input: React.CSSProperties = {
+  width: "100%",
+  marginBottom: 10,
+  padding: 8,
+  borderRadius: 6,
+  border: "1px solid #ccc",
+};
+
+const button: React.CSSProperties = {
+  padding: 10,
+  width: "100%",
+  background: "#007bff",
+  border: "none",
+  color: "#fff",
+  fontWeight: "bold",
+  borderRadius: 6,
+  cursor: "pointer",
 };
 
 export default AddCategory;

@@ -5,7 +5,6 @@ import { useNavigate } from "react-router-dom";
 interface Category {
   id: number;
   name: string;
-  image: string;
   description: string;
 }
 
@@ -13,13 +12,13 @@ const Categories: React.FC = () => {
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
   const [role, setRole] = useState<string>("guest");
+
   const navigate = useNavigate();
 
   useEffect(() => {
     const user = localStorage.getItem("user");
     if (user) {
-      const parsedUser = JSON.parse(user);
-      setRole(parsedUser.role || "guest");
+      setRole(JSON.parse(user).role || "guest");
     }
     fetchCategories();
   }, []);
@@ -30,47 +29,85 @@ const Categories: React.FC = () => {
       .select("*")
       .order("id", { ascending: false });
 
-    if (error) console.error(error.message);
-    else setCategories(data || []);
-
+    if (!error) setCategories(data || []);
     setLoading(false);
   };
 
-  if (loading) return <p>Đang tải danh mục...</p>;
+  const deleteCategory = async (id: number) => {
+    if (!window.confirm("Bạn chắc chắn muốn xóa?")) return;
+
+    const { error } = await supabase.from("categories").delete().eq("id", id);
+
+    if (!error) {
+      setCategories(categories.filter((c) => c.id !== id));
+      alert("Đã xóa!");
+    }
+  };
+
+  if (loading) return <p>Đang tải...</p>;
 
   return (
-    <div style={{ padding: "20px" }}>
-      <h1>Danh mục sản phẩm</h1>
+    <div style={{ padding: 20 }}>
+      <h1 style={{ marginBottom: 20 }}>Danh mục</h1>
 
-      <div style={{ display: "flex", flexWrap: "wrap", gap: "20px" }}>
+      <div style={{ display: "flex", flexWrap: "wrap", gap: 20 }}>
         {categories.map((cate) => (
           <div
             key={cate.id}
             style={{
-              width: "220px",
-              padding: "10px",
-              border: "1px solid #ccc",
-              borderRadius: "8px",
-              background: "#111",
+              padding: 15,
+              width: 220,
+              borderRadius: 10,
+              background: "#000",
               color: "#fff",
+              border: "1px solid #333",
               cursor: "pointer",
             }}
             onClick={() => navigate(`/category/${cate.id}`)}
           >
-            <img
-              src={cate.image}
-              alt={cate.name}
-              style={{
-                width: "100%",
-                height: "180px",
-                borderRadius: "8px",
-                objectFit: "cover",
-              }}
-            />
-            <h3 style={{ marginTop: "10px" }}>{cate.name}</h3>
-            <p style={{ fontSize: "13px", color: "#ccc" }}>
-              {cate.description}
-            </p>
+            <h3 style={{ marginBottom: 5 }}>{cate.name}</h3>
+            <p style={{ fontSize: 13, color: "#aaa" }}>{cate.description}</p>
+
+            {role === "admin" && (
+              <div style={{ display: "flex", gap: 10, marginTop: 10 }}>
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    navigate(`/edit-category/${cate.id}`);
+                  }}
+                  style={{
+                    flex: 1,
+                    padding: 6,
+                    background: "#ffc107",
+                    border: "none",
+                    borderRadius: 6,
+                    cursor: "pointer",
+                    fontWeight: "bold",
+                  }}
+                >
+                  Sửa
+                </button>
+
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    deleteCategory(cate.id);
+                  }}
+                  style={{
+                    flex: 1,
+                    padding: 6,
+                    background: "#dc3545",
+                    border: "none",
+                    borderRadius: 6,
+                    cursor: "pointer",
+                    color: "#fff",
+                    fontWeight: "bold",
+                  }}
+                >
+                  Xoá
+                </button>
+              </div>
+            )}
           </div>
         ))}
       </div>
@@ -80,17 +117,15 @@ const Categories: React.FC = () => {
           onClick={() => navigate("/add-category")}
           style={{
             position: "fixed",
-            bottom: "30px",
-            right: "30px",
-            backgroundColor: "#28a745",
-            color: "#fff",
-            border: "none",
+            bottom: 30,
+            right: 30,
+            width: 55,
+            height: 55,
             borderRadius: "50%",
-            width: "55px",
-            height: "55px",
-            fontSize: "28px",
-            fontWeight: "bold",
-            boxShadow: "0 4px 10px rgba(0,0,0,0.2)",
+            background: "#28a745",
+            color: "#fff",
+            fontSize: 28,
+            border: "none",
             cursor: "pointer",
           }}
         >

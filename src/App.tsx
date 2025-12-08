@@ -16,7 +16,9 @@ import ProductDetail from "./ProductDetail";
 import UserDetail from "./UserDetail"; // 👈 import UserDetail
 import ChatBox from "./ChatBox"; // 👈 Thêm chat box
 import ChatBubble from "./ChatBubble"; // 👈 Bong bóng chat
-
+import Categories from "./Categories";
+import CategoryProducts from "./CategoryProducts";
+import AddCategory from "./AddCategory";
 const App: React.FC = () => {
   return (
     <Router>
@@ -59,6 +61,10 @@ const App: React.FC = () => {
 
           {/* Chat riêng – nếu muốn mở toàn màn hình */}
           <Route path="chat" element={<ChatBox />} />
+          {/* Danh mỤC */}
+          <Route path="/categories" element={<Categories />} />
+          <Route path="/category/:id" element={<CategoryProducts />} />
+          <Route path="/add-category" element={<AddCategory />} />
         </Route>
 
         {/* Fallback 404 */}

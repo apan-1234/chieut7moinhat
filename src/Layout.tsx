@@ -156,7 +156,7 @@ const Layout = () => {
               { to: "/", label: "Trang Chủ" },
               { to: "/page1", label: "Shop" },
               { to: "/users", label: "Thành Viên" },
-              { to: "#", label: "Giới Thiệu" },
+              { to: "#", label: "Đơn Hàng" },
             ].map((item, i) => (
               <li key={i} style={{ margin: "0 20px" }}>
                 <Link

@@ -59,6 +59,7 @@ const App: React.FC = () => {
 
           {/* Chat riêng – nếu muốn mở toàn màn hình */}
           <Route path="chat" element={<ChatBox />} />
+          {/* Đơn hàng */}
         </Route>
 
         {/* Fallback 404 */}
